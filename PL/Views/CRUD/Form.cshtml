@@ -1,0 +1,149 @@
+﻿@model ML.DatosPersonales
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2>Formulario</h2>
+        </div>
+        <div class="col" style="text-align:end">
+            @Html.ActionLink("Regresar","GetAll","CRUD", htmlAttributes: new { @class = "btn btn-success" })
+        </div>
+    </div>
+
+    <hr />
+
+    @using (Html.BeginForm("Form","CRUD",FormMethod.Post, htmlAttributes: new { @id = "form" }))
+    {
+        <div class="row">
+            <div class="col">
+                @Html.LabelFor(model => model.Nombre)
+                @Html.TextBoxFor(model => model.Nombre,
+            new { @class = "form-control", @id = "txtNombre", @onblur = "ValidarLetras('lblNombre', 'txtNombre')" })
+                @Html.Label(null,"",new { @id = "lblNombre" })
+            </div>
+
+            <div class="col">
+                @Html.LabelFor(model => model.PrimerApellido)
+                @Html.TextBoxFor(model => model.PrimerApellido,
+            new { @class = "form-control", @id = "txtPrimerApellido", @onblur = "ValidarLetras('lblPrimerApellido', 'txtPrimerApellido')" })
+                @Html.Label(null,"",new { @id = "lblPrimerApellido"})
+            </div>
+
+            <div class="col">
+                @Html.LabelFor(model => model.SegundoApellido)
+                @Html.TextBoxFor(model => model.SegundoApellido,
+            new { @class = "form-control", @id = "txtSegundoApellido", @onblur = "ValidarLetras('lblSegundoApellido', 'txtSegundoApellido')" })
+                @Html.Label(null,"", new { @id = "lblSegundoApellido" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col" id="divSexo">
+                @Html.LabelFor(model => model.Sexo) <br>
+                &ensp;@Html.Label("Masculino")&ensp;@Html.RadioButtonFor(model => model.Sexo, "M", new { @id = "rbSexoM"})
+                &ensp;@Html.Label("Femenino")&ensp;@Html.RadioButtonFor(model => model.Sexo, "F", new { @id = "rbSexoF"})
+                @Html.ValidationMessageFor(model => model.Sexo)
+            </div>
+
+            <div class="col" id="divEstado">
+                @Html.LabelFor(model => model.EstadoNacimiento)
+                @Html.DropDownListFor(model => model.EstadoNacimiento.IdEstado,
+            new SelectList(Model.EstadoNacimiento.Estados, "IdEstado", "Nombre"),
+            "Selecciona un estado", new { @class = "form-control", @id = "ddlEstadoNacimiento"})
+            </div>
+
+            <div class="col" id="divFechaNac">
+                @Html.LabelFor(model => model.FechaNacimiento)
+                <input id="txtFechaNacimiento" class="form-control" value="" />
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col">
+                @Html.LabelFor(model => model.Telefono)
+                @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control" } )
+            </div>
+
+            <div class="col">
+                @Html.LabelFor(model => model.Celular)
+                @Html.TextBoxFor(model => model.Celular, new { @class = "form-control" } )
+            </div>
+
+            <div class="col">
+                @Html.LabelFor(model => model.Direccion.Estado)
+                @Html.DropDownListFor(model => model.Direccion.Estado.IdEstado,
+            new SelectList(Model.Direccion.Estado.Estados, "IdEstado", "Nombre"),
+            "Selecciona un estado", new { @class = "form-control", @id = "ddlEstadoActual"})
+            </div>
+
+        </div>
+
+        <br />
+
+        <div class="row">
+
+            <div class="col">
+                @Html.LabelFor(model => model.Direccion.Municipio)
+                @Html.DropDownListFor(model => model.Direccion.Municipio.IdMunicipio,
+            new SelectList(Model.Direccion.Municipio.List, "IdMunicipio", "Nombre"),
+            "Selecciona un municipio", new { @class = "form-control", @id = "ddlMunicipio"})
+            </div>
+
+            <div class="col">
+                @Html.LabelFor(model => model.Direccion.Colonia)
+                @Html.DropDownListFor(model => model.Direccion.Colonia.IdColonia,
+            new SelectList(Model.Direccion.Colonia.List, "IdColonia", "Nombre"),
+            "Selecciona una colonia", new { @class = "form-control", @id = "ddlColonia"})
+            </div>
+
+            <div class="col">
+                @Html.LabelFor(model => model.Calle)
+                @Html.TextBoxFor(model => model.Calle, new { @class = "form-control" } )
+            </div>
+
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Numero)
+                @Html.TextBoxFor(model => model.Numero, new { @class = "form-control" } )
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            
+            <div class="col-md-3">                            
+                <input type="submit" value="Guardar" class="btn btn-success" />
+                @Html.ActionLink("Regresar", "GetAll", "CRUD", htmlAttributes: new { @class = "btn btn-danger" })
+            </div>
+        </div>
+    }
+
+</div>
+
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <script type="text/javascript">
+        $(function () {
+            $("#txtFechaNacimiento").datepicker({
+                dateFormat: 'dd-mm-yy',
+                changeMonth: true,
+                changeYear: true
+            });
+        });
+    </script>
+
+}

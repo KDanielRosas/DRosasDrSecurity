@@ -1,0 +1,210 @@
+﻿@model ML.DatosPersonales
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2>Generar CURP</h2>
+        </div>
+    </div>
+
+    <hr />
+
+<form id="form">     
+
+    <div class="row">
+        <div class="col">
+            @Html.LabelFor(model => model.Nombre)
+            @Html.TextBoxFor(model => model.Nombre, 
+                new { @class = "form-control", @id = "txtNombre", @onblur = "ValidarLetras('lblNombre', 'txtNombre')" })
+            @Html.Label(null,"",new { @id = "lblNombre" })
+        </div>
+
+        <div class="col">
+            @Html.LabelFor(model => model.PrimerApellido)
+            @Html.TextBoxFor(model => model.PrimerApellido, 
+                new { @class = "form-control", @id = "txtPrimerApellido", @onblur = "ValidarLetras('lblPrimerApellido', 'txtPrimerApellido')" })
+            @Html.Label(null,"",new { @id = "lblPrimerApellido"})
+        </div>
+
+        <div class="col">
+            @Html.LabelFor(model => model.SegundoApellido)
+            @Html.TextBoxFor(model => model.SegundoApellido, 
+                new { @class = "form-control", @id = "txtSegundoApellido", @onblur = "ValidarLetras('lblSegundoApellido', 'txtSegundoApellido')" })
+            @Html.Label(null,"", new { @id = "lblSegundoApellido" })
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">            
+        <div class="col" id="divSexo">
+            @Html.LabelFor(model => model.Sexo) <br>
+            &ensp;@Html.Label("Masculino")&ensp;@Html.RadioButtonFor(model => model.Sexo, "M", new { @id = "rbSexoM"})
+            &ensp;@Html.Label("Femenino")&ensp;@Html.RadioButtonFor(model => model.Sexo, "F", new { @id = "rbSexoF"})
+            @Html.ValidationMessageFor(model => model.Sexo)
+        </div>
+
+        <div class="col" id="divEstado">
+            @Html.LabelFor(model => model.EstadoNacimiento)
+                @Html.DropDownListFor(model => model.EstadoNacimiento.IdEstado, 
+                    new SelectList(Model.EstadoNacimiento.Estados, "IdEstado", "Nombre"),
+            "Selecciona un estado", new { @class = "form-control", @id = "ddlEstadoNacimiento"})
+        </div>
+
+        <div class="col" id="divFechaNac">
+            @Html.LabelFor(model => model.FechaNacimiento)
+            <input id="txtFechaNacimiento" class="form-control" value=""/>
+        </div>
+
+    </div>
+
+    <hr />
+        @Html.Label("CURP:")
+    <div class="row">
+        <div class="col">         
+            <input class="form-control" id="txtCURP" readonly />
+        </div>
+        <div class="col" style="text-align:end">
+            <input type="button" value="Validar" class="btn btn-info" id="btnValidar" onclick="ValidarForm()" />
+            <input type="button" value="Generar CURP" class="btn btn-success visually-hidden" id="btnSubmit" onclick="GenerarCURP()" />
+        </div>        
+    </div>
+
+</form>       
+    
+</div> <!-- container -->
+
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    @*<link rel="stylesheet" href="/resources/demos/style.css">*@
+
+    <script type="text/javascript">
+        var flagDdl = false;
+
+        $('#ddlEstadoNacimiento').change(function () {
+            flagDdl = true;
+        });
+
+        $(function () {
+            $("#txtFechaNacimiento").datepicker({
+                dateFormat: 'dd-mm-yy',
+                changeMonth: true,
+                changeYear: true
+            });           
+        });        
+
+        function ValidarLetras(idLabel, idTxtBx) {
+            var letters = document.getElementById(idTxtBx).value;
+            if (!/^[a-zñA-ZÑ\s]*$/g.test(letters)) {
+                $('#' + idLabel).text("Solo se aceptan letras.");
+                $('#' + idLabel).css({ "color": "red" });
+                $('#' + idTxtBx).css({ "borderColor": "red", "background-color": "#f8d7da" });
+                return false;
+            }
+            else {
+                $('#' + idLabel).text("");
+                $('#' + idTxtBx).css({ "border-color": "green", "background-color": "#82E0AA" });
+                $('#' + idTxtBx).prop({ "checked": "true" });
+                return true;
+            }
+        }
+
+        function ValidarForm(){
+            var $list = $("#form :input[type='text']");
+            var flagTxt = false;
+            var flagForm = false;
+
+             $list.each(function(i, item){
+                if(item.checked){
+                    flagTxt = true;
+                    return true;
+                }
+                else{
+                    flagTxt = false;
+                    alert('Revise la información ingresada por favor.')
+                    return false;
+                }
+            });
+
+                if(flagTxt){
+                var rbM = $('#rbSexoM');
+                var rbF = $('#rbSexoF');
+                var ddl = $('#ddlEstadoNacimiento');
+                    if ( (rbM[0].checked) || (rbF[0].checked) ){
+                        if ( (flagDdl == false) || ($('#txtFechaNacimiento').val() == "") ) {
+                            alert('Revise la información ingresada por favor.');
+                            return false;
+                            
+                        }
+                        else {
+                            flagForm = true;
+                        }                        
+                    }
+                    else{
+                        alert('Debe seleccionar el sexo.');
+                        return false;
+                    }
+                
+                    if(flagForm){
+                        $('#btnValidar').addClass('visually-hidden');
+                        $('#btnSubmit').removeClass('visually-hidden');
+
+                        $list.each(function (i, item) {
+                            item.readOnly = true;
+                        });
+
+                    $('#divSexo').children().attr('disabled', true);
+                    $('#divEstado').children().attr('disabled', true);
+                    $('#divFechaNac').children().attr('disabled', true);
+                    }
+                    else{
+                        alert('Revise la información ingresada por favor.');
+                    }
+                }
+                else{
+                    alert('Revise la información ingresada por favor');
+                }            
+        }
+
+        function GenerarCURP(){
+            var sex = "";
+            var rb = $('#rbSexoM');
+            var ddl = document.getElementById('ddlEstadoNacimiento');
+            if(rb[0].checked){
+                sex = "M";
+            }
+            else{
+                sex = "F";
+            }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GenerarCURP")',
+                dataType: 'json',
+                data:{
+                    datos: {
+                        Nombre: $('#txtNombre').val(),
+                        PrimerApellido: $('#txtPrimerApellido').val(),
+                        SegundoApellido: $('#txtSegundoApellido').val(),
+                        Sexo: sex,
+                        FechaNacimiento: $('#txtFechaNacimiento').val(),
+                        EstadoNacimiento: {
+                            IdEstado: $('#ddlEstadoNacimiento').val()
+                        }
+                    }                    
+                },
+                success: function(result){
+                    $('#txtCURP').val(result);                    
+                },
+                error: function(ex){
+                    alert('Error: ' + ex);
+                }
+            })
+        }
+    </script>
+}
