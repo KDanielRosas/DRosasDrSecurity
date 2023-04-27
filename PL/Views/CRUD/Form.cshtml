@@ -18,6 +18,7 @@
 
     @using (Html.BeginForm("Form","CRUD",FormMethod.Post, htmlAttributes: new { @id = "form" }))
     {
+        @Html.TextBoxFor(model => model.IdDatosPersonales, new { @class = "visually-hidden" })
         <div class="row">
             <div class="col">
                 @Html.LabelFor(model => model.Nombre)
@@ -137,6 +138,8 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
     <script type="text/javascript">
+        //Asignar el valor de Model.Sexo a una variable
+        var gender = '@Model.Sexo';
         $(function () {
             $("#txtFechaNacimiento").datepicker({
                 dateFormat: 'dd-mm-yy',
@@ -144,6 +147,16 @@
                 changeYear: true
             });
         });
+
+        //Obtiene el caracter en la posicion 0
+        if (gender.charAt(0) === 'M') {
+            $("#rbSexoM").attr("checked", true)
+        }
+        //Obtiene el primer caracter (EmpiezaCon)
+        if (gender.startsWith('F')) {
+            $("#rbSexoF").attr("checked", true)
+        }
+
     </script>
 
 }

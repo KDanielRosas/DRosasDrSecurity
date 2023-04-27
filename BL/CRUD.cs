@@ -131,7 +131,7 @@ namespace BL
             return obj;
         }//GetById
 
-        public static ML.Colonia GetColonias()
+        public static List<ML.Colonia> GetColonias()
         {
             ML.Colonia colonia = new();
             colonia.List = new List<ML.Colonia>();
@@ -152,10 +152,10 @@ namespace BL
                     }
                 }
             }
-            return colonia;
+            return colonia.List;
         }//Colonia
 
-        public static ML.Municipio GetMunicipios()
+        public static List<ML.Municipio> GetMunicipios()
         {
             ML.Municipio municipio = new();
             municipio.List = new List<ML.Municipio>();
@@ -176,10 +176,10 @@ namespace BL
                     }
                 }
             }
-            return municipio;
+            return municipio.List;
         }//Municipio
 
-        public static ML.Estado GetEstados()
+        public static List<object> GetEstados()
         {
             ML.Estado estado = new();
             estado.Estados = new List<object>();
@@ -200,7 +200,7 @@ namespace BL
                     }
                 }
             }
-            return estado;
+            return estado.Estados;
         }//Estado
     }
 }

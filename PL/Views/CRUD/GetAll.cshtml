@@ -43,7 +43,7 @@
                         <td>
                             <a class="btn btn-warning"
                                href="@Url.Action("Form", "CRUD",
-                                    new { IdDatos = item.IdDatosPersonales})"><i class="fa-regular fa-pen-to-square"></i></a>
+                                    new { idDatos = item.IdDatosPersonales})"><i class="fa-regular fa-pen-to-square"></i></a>
                         </td>
                         <td class="visually-hidden">@item.IdDatosPersonales</td>
                         <td>@item.Nombre</td>
@@ -61,7 +61,7 @@
                         <td>
                             <a class="btn btn-danger"
                                href="@Url.Action("Delete","CRUD",
-                                    new { IdDatos = item.IdDatosPersonales })"><i class="fa-solid fa-trash"></i></a>
+                                    new { idDatos = item.IdDatosPersonales })"><i class="fa-solid fa-trash"></i></a>
                         </td>
                     </tr>
                 }
